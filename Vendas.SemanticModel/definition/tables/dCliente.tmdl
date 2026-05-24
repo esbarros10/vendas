@@ -1,0 +1,99 @@
+table dCliente
+	lineageTag: 480d9e95-768e-4d09-854e-ec2fba0c862e
+
+	column id_cliente
+		dataType: int64
+		formatString: 0
+		lineageTag: ae3a16c6-6a99-4f1f-8735-3d0a8547f783
+		summarizeBy: none
+		sourceColumn: id_cliente
+
+		annotation SummarizationSetBy = Automatic
+
+	column nome_cliente
+		dataType: string
+		lineageTag: 4bb7e582-7e2c-435d-b330-6b1dde674550
+		summarizeBy: none
+		sourceColumn: nome_cliente
+
+		annotation SummarizationSetBy = Automatic
+
+	column cnpj
+		dataType: string
+		lineageTag: b56ef9e6-46f1-4fb6-a024-a99fd6b992eb
+		summarizeBy: none
+		sourceColumn: cnpj
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo_cliente
+		dataType: string
+		lineageTag: 171eb20e-72af-4abc-9142-ef6254ec0138
+		summarizeBy: none
+		sourceColumn: tipo_cliente
+
+		annotation SummarizationSetBy = Automatic
+
+	column uf
+		dataType: string
+		lineageTag: 227aa86a-d08f-4f21-86a9-d3d47065ccf7
+		summarizeBy: none
+		sourceColumn: uf
+
+		annotation SummarizationSetBy = Automatic
+
+	column uf_nome
+		dataType: string
+		lineageTag: e2654318-6a04-46d7-89d1-b3392474a1d0
+		summarizeBy: none
+		sourceColumn: uf_nome
+
+		annotation SummarizationSetBy = Automatic
+
+	column cidade
+		dataType: string
+		lineageTag: 9974043d-fb28-4acf-91ff-03033a00d43a
+		summarizeBy: none
+		sourceColumn: cidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column limite_credito_brl
+		dataType: int64
+		formatString: 0
+		lineageTag: fb9c0673-206b-48f0-88b4-69509a2d5699
+		summarizeBy: sum
+		sourceColumn: limite_credito_brl
+
+		annotation SummarizationSetBy = Automatic
+
+	column data_cadastro
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 316c8f11-03a6-4314-a22c-f2e4dbc16260
+		summarizeBy: none
+		sourceColumn: data_cadastro
+
+		variation Variation
+			isDefault
+			relationship: 7e83fda8-b324-4bcb-bee2-a5df9e544792
+			defaultHierarchy: LocalDateTable_fbacc7c1-cc73-4b45-a8ce-79c15263c6d1.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition dCliente = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\Users\roger\Desktop\materiais\raw\dim_cliente_raw.csv"),[Delimiter=";", Columns=9, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"id_cliente", Int64.Type}, {"nome_cliente", type text}, {"cnpj", type text}, {"tipo_cliente", type text}, {"uf", type text}, {"uf_nome", type text}, {"cidade", type text}, {"limite_credito_brl", Int64.Type}, {"data_cadastro", type date}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

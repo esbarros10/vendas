@@ -1,0 +1,97 @@
+table dProduto
+	lineageTag: 9712e04c-216d-4079-90b0-dce8e97e77d4
+
+	column id_produto
+		dataType: int64
+		formatString: 0
+		lineageTag: 92f6d94d-91de-4647-b07b-e45796e920f3
+		summarizeBy: none
+		sourceColumn: id_produto
+
+		annotation SummarizationSetBy = Automatic
+
+	column sku
+		dataType: string
+		lineageTag: bd513fe2-cbc6-4fcf-8a22-9d1e517f4639
+		summarizeBy: none
+		sourceColumn: sku
+
+		annotation SummarizationSetBy = Automatic
+
+	column descricao
+		dataType: string
+		lineageTag: c767d6ef-8b3d-4ba5-a64d-54aa814f4aa2
+		summarizeBy: none
+		sourceColumn: descricao
+
+		annotation SummarizationSetBy = Automatic
+
+	column categoria
+		dataType: string
+		lineageTag: b1fc55d1-f1bd-4bd8-b91e-0db0ddc4b6dc
+		summarizeBy: none
+		sourceColumn: categoria
+
+		annotation SummarizationSetBy = Automatic
+
+	column veiculo_aplicacao
+		dataType: string
+		lineageTag: e576872c-2866-40ca-8fc4-76411f1482a5
+		summarizeBy: none
+		sourceColumn: veiculo_aplicacao
+
+		annotation SummarizationSetBy = Automatic
+
+	column peso_kg
+		dataType: double
+		lineageTag: 4a7a89e6-4db5-4ea6-a3ee-bb5f7b44d647
+		summarizeBy: none
+		sourceColumn: peso_kg
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column custo_unit_usd
+		dataType: double
+		lineageTag: 8bf8d66e-aaab-4e0c-bd0d-468c6f5367e1
+		summarizeBy: none
+		sourceColumn: custo_unit_usd
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column preco_unit_brl
+		dataType: double
+		lineageTag: 6135d413-c6da-4a4b-a08e-e6dec74642b3
+		summarizeBy: none
+		sourceColumn: preco_unit_brl
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column qtd_por_embalagem
+		dataType: int64
+		formatString: 0
+		lineageTag: 1f66fa45-aba2-425c-afac-e87b7faf37c2
+		summarizeBy: none
+		sourceColumn: qtd_por_embalagem
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dProduto = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\Users\roger\Desktop\materiais\raw\dim_produto_raw.csv"),[Delimiter=";", Columns=9, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"id_produto", Int64.Type}, {"sku", type text}, {"descricao", type text}, {"categoria", type text}, {"veiculo_aplicacao", type text}, {"peso_kg", type number}, {"custo_unit_usd", type number}, {"preco_unit_brl", type number}, {"qtd_por_embalagem", Int64.Type}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

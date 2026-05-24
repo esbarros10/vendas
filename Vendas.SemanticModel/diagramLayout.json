@@ -1,0 +1,74 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 1
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 236.38305001469382,
+            "y": 0
+          },
+          "nodeIndex": "dCliente",
+          "nodeLineageTag": "480d9e95-768e-4d09-854e-ec2fba0c862e",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 472,
+            "y": 0
+          },
+          "nodeIndex": "dProduto",
+          "nodeLineageTag": "9712e04c-216d-4079-90b0-dce8e97e77d4",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 235.20156119318534,
+            "y": 259
+          },
+          "nodeIndex": "fVendas",
+          "nodeLineageTag": "d52d6048-7914-49ac-8225-26b17a8a1d0c",
+          "size": {
+            "height": 233,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 0
+          },
+          "nodeIndex": "dCalendario",
+          "nodeLineageTag": "43a345af-7810-4c40-a901-4d5b3c19bb14",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas as tabelas",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas as tabelas",
+  "defaultDiagram": "Todas as tabelas"
+}

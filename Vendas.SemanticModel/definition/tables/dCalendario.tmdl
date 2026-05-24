@@ -1,0 +1,95 @@
+table dCalendario
+	lineageTag: 43a345af-7810-4c40-a901-4d5b3c19bb14
+
+	column Data
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 6127dc7e-a602-40ae-a5cc-4cf191eb5a13
+		summarizeBy: none
+		sourceColumn: Data
+
+		variation Variation
+			isDefault
+			relationship: 007a2f1c-a1e6-413f-a75f-8eb224970332
+			defaultHierarchy: LocalDateTable_79a44d53-a38b-4249-83c4-6fdcf6c62c2a.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Ano
+		dataType: int64
+		formatString: 0
+		lineageTag: 3038916c-26e0-4489-a7e6-7df3671bc2bf
+		summarizeBy: sum
+		sourceColumn: Ano
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mês
+		dataType: int64
+		formatString: 0
+		lineageTag: aa431ebb-5dd9-44cf-80d5-5f7945a207a7
+		summarizeBy: sum
+		sourceColumn: Mês
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nome do Mês'
+		dataType: string
+		lineageTag: ea5e9e87-534a-48e0-a601-12b5588023b4
+		summarizeBy: none
+		sourceColumn: Nome do Mês
+
+		annotation SummarizationSetBy = Automatic
+
+	column Dia
+		dataType: int64
+		formatString: 0
+		lineageTag: 28fc354b-0a4e-4ef5-b852-917eb8bc037a
+		summarizeBy: sum
+		sourceColumn: Dia
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mês/Ano
+		dataType: string
+		lineageTag: 057fee25-2824-48d1-8350-26fbaa2f6d0d
+		summarizeBy: none
+		sourceColumn: Mês/Ano
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês/Ano Ordenação'
+		dataType: int64
+		formatString: 0
+		lineageTag: 18b452d0-c718-4531-8ef4-44b2fe50d0dd
+		summarizeBy: sum
+		sourceColumn: Mês/Ano Ordenação
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dCalendario = m
+		mode: import
+		source =
+				let
+				    Fonte = Datas(#date(2020, 1, 1), 3096, #duration(1, 0, 0, 0)),
+				    #"Convertido para Tabela" = Table.FromList(Fonte, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+				    #"Colunas Renomeadas" = Table.RenameColumns(#"Convertido para Tabela",{{"Column1", "Data"}}),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Colunas Renomeadas",{{"Data", type date}}),
+				    #"Ano Inserido" = Table.AddColumn(#"Tipo Alterado", "Ano", each Date.Year([Data]), Int64.Type),
+				    #"Mês Inserido" = Table.AddColumn(#"Ano Inserido", "Mês", each Date.Month([Data]), Int64.Type),
+				    #"Nome do Mês Inserido" = Table.AddColumn(#"Mês Inserido", "Nome do Mês", each Date.MonthName([Data]), type text),
+				    #"Dia Inserido" = Table.AddColumn(#"Nome do Mês Inserido", "Dia", each Date.Day([Data]), Int64.Type),
+				    #"Primeiros Caracteres Inseridos" = Table.AddColumn(#"Dia Inserido", "Primeiros caracteres", each Text.Start([Nome do Mês], 3), type text),
+				    #"Coluna Mesclada Inserida" = Table.AddColumn(#"Primeiros Caracteres Inseridos", "Mês/Ano", each Text.Combine({[Primeiros caracteres], Text.From([Ano], "pt-BR")}, "/"), type text),
+				    #"Colunas Removidas" = Table.RemoveColumns(#"Coluna Mesclada Inserida",{"Primeiros caracteres"}),
+				    #"Personalização Adicionada" = Table.AddColumn(#"Colunas Removidas", "Mês/Ano Ordenação", each ([Ano]-2007) * 12 + [Mês]),
+				    #"Tipo Alterado1" = Table.TransformColumnTypes(#"Personalização Adicionada",{{"Mês/Ano Ordenação", Int64.Type}})
+				in
+				    #"Tipo Alterado1"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+
