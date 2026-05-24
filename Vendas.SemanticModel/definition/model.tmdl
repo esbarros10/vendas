@@ -19,6 +19,7 @@ ref table dProduto
 ref table fVendas
 ref table dCalendario
 ref table LocalDateTable_79a44d53-a38b-4249-83c4-6fdcf6c62c2a
+ref table fVendas_Anomalias
 
 ref cultureInfo pt-BR
 
